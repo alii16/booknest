@@ -9,10 +9,17 @@ class IsPustakawan
 {
     public function handle(Request $request, Closure $next)
     {
+        // Jika user adalah pustakawan, lanjut ke request
         if (auth()->check() && auth()->user()->role === 'pustakawan') {
             return $next($request);
         }
 
-        abort(403, 'Akses hanya untuk pustakawan.');
+        // Jika user adalah admin, redirect ke halaman admin
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return redirect('/admin/dashboard');
+        }
+
+        // Jika bukan pustakawan maupun admin, tolak akses
+        abort(403, 'Akses hanya untuk pustakawan atau admin.');
     }
 }

@@ -13,8 +13,14 @@ class LoanController extends Controller
     // Daftar peminjaman di admin panel
     public function index()
     {
-        $loans = Loan::with('user', 'book')->get();
-        return view('admin.loans.index', compact('loans'));
+         $loans = Loan::where('user_id', auth()->id())->get();
+        return view('buku.pinjamanku', compact('loans'));
+    }
+
+    public function adminLoans()
+    {
+        $loans = \App\Models\Loan::with(['book', 'user'])->latest()->get();
+        return view('pustakawan.loans.index', compact('loans'));
     }
 
     // Simpan peminjaman buku
@@ -50,4 +56,39 @@ class LoanController extends Controller
 
         return back()->with('success', 'Buku berhasil dipinjam')->with('notif_duration', 2000);
     }
+
+    public function destroy($id)
+    {
+        $loan = Loan::findOrFail($id);
+
+        if ($loan->book) {
+            $loan->book->update(['dipinjam' => false]);
+        }
+        
+        $loan->delete(); 
+
+        return redirect()->route('loans.index')->with('success', 'Data peminjaman berhasil dihapus.');
+    }
+    public function myLoans()
+    {
+        $loans = \App\Models\Loan::with('book')
+            ->where('user_id', auth()->id())
+            ->orderByDesc('tanggal_pinjam')
+            ->get();
+
+        // Tambahkan properti denda_manual untuk setiap loan
+        foreach ($loans as $loan) {
+            $batas = \Carbon\Carbon::parse($loan->tanggal_pinjam)->addDays(4);
+            $sekarang = $loan->tanggal_kembali
+                ? \Carbon\Carbon::parse($loan->tanggal_kembali)
+                : \Carbon\Carbon::now();
+
+            $loan->denda_manual = $sekarang->greaterThan($batas)
+                ? $sekarang->diffInHours($batas) * 500
+                : 0;
+        }
+
+        return view('buku.pinjamanku', compact('loans'));
+    }
+
 }

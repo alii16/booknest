@@ -14,6 +14,10 @@ class AppServiceProvider extends ServiceProvider
             return '/admin/books';
         }
 
+        if ($user->role === 'admin') {
+            return '/admin/dashboard';
+        }
+
         return '/buku'; // untuk peminjam
     }
 

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('tanggal_pinjam');
             $table->timestamp('tanggal_kembali')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
