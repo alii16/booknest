@@ -6,6 +6,8 @@ use App\Models\Book;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Kategori;
+
 
 class BookController extends Controller
 {
@@ -13,33 +15,24 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $query = Book::query();
-        
-        // Search functionality
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('judul', 'like', '%' . $search . '%')
-                  ->orWhere('penulis', 'like', '%' . $search . '%')
-                  ->orWhere('kategori', 'like', '%' . $search . '%');
-            });
-        }
-        
-        // Filter by category
-        if ($request->has('kategori') && $request->kategori != '') {
-            $query->where('kategori', $request->kategori);
-        }
-        
-        $books = $query->paginate(12);
-        $categories = Book::distinct()->pluck('kategori');
 
-        // Jika user mengakses lewat URL pustakawan
-        if ($request->is('pustakawan/books') || $request->is('pustakawan/books/*')) {
-            return view('pustakawan.books.index', compact('books', 'categories'));
+        // Search
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . $request->search . '%');
         }
 
-        return view('buku.index', compact('books', 'categories'));
+        // Filter kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori_id', $request->kategori);
+        }
+
+        $books = $query->paginate(10);
+
+        // Ambil semua kategori untuk dropdown
+        $kategoris = Kategori::all();
+
+        return view('buku.index', compact('books', 'kategoris'));
     }
-
     // Tampilkan form tambah buku
     public function create()
     {

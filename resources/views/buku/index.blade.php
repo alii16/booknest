@@ -8,33 +8,50 @@
         <p class="text-gray-600">Temukan dan pinjam buku favorit Anda dari koleksi perpustakaan</p>
     </div>
 
-    <!-- Search and Filter Section -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+    <!-- Search and Filter -->
+    <form method="GET" action="{{ route('buku.index') }}" class="bg-gray-50 p-6 rounded-xl mb-6">
         <div class="flex flex-col md:flex-row gap-4">
+            <!-- Search -->
             <div class="flex-1">
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" placeholder="Cari judul buku, penulis, atau kategori..." 
-                           class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}"
+                        placeholder="Cari buku..." 
+                        class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
                 </div>
             </div>
-            <div class="flex-row space-y-2">
-                <select class="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option>Semua Kategori</option>
-                    <option>Fiksi</option>
-                    <option>Non-Fiksi</option>
-                    <option>Sains</option>
-                    <option>Teknologi</option>
-                    <option>Sejarah</option>
-                </select>
-                <select class="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option>Semua Status</option>
-                    <option>Tersedia</option>
-                    <option>Dipinjam</option>
-                </select>
-            </div>
+
+            <!-- Filter Kategori -->
+            <select 
+                name="kategori"
+                class="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+                <option value="">Semua Kategori</option>
+                @foreach($kategoris as $kategori)
+                    <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
+                        {{ $kategori->nama }}
+                    </option>
+                @endforeach
+            </select>
+            <button 
+                type="submit" 
+                class="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
+            >
+                Cari
+            </button>
+            <a 
+                href="{{ route('books.index') }}" 
+                class="px-4 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200"
+            >
+                Reset
+            </a>
         </div>
-    </div>
+    </form>
+
 
     <!-- Books Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">

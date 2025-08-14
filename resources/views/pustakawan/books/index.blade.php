@@ -50,22 +50,45 @@
     </div>
     
     <!-- Search and Filter -->
-    <div class="bg-gray-50 p-6 rounded-xl mb-6">
+    <form method="GET" action="{{ route('pustakawan.books.index') }}" class="bg-gray-50 p-6 rounded-xl mb-6">
         <div class="flex flex-col md:flex-row gap-4">
+            <!-- Search -->
             <div class="flex-1">
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" placeholder="Cari buku..." class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}"
+                        placeholder="Cari buku..." 
+                        class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
                 </div>
             </div>
-            <select class="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option>Semua Kategori</option>
-                <option>Fiksi</option>
-                <option>Non-Fiksi</option>
-                <option>Sains</option>
+
+            <!-- Filter Kategori -->
+            <select 
+                name="kategori"
+                class="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+                <option value="">Semua Kategori</option>
+                @foreach($kategoris as $kategori)
+                    <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
+                        {{ $kategori->nama }}
+                    </option>
+                @endforeach
             </select>
+
+            <button 
+                type="submit" 
+                class="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
+            >
+                Cari
+            </button>
         </div>
-    </div>
+    </form>
+
+
     
     <!-- Books Table -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">

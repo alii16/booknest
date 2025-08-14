@@ -73,4 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/loans', [LoanController::class, 'adminLoans'])->name('loans.index');
 });
 
+Route::get('/buku', [BookController::class, 'index'])->name('buku.index');
+Route::get('/books', [BookController::class, 'index'])->name('books.index');
+
 require __DIR__.'/auth.php';
