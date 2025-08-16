@@ -1,383 +1,304 @@
 @extends('layouts.app')
 @section('title', 'Daftar Buku')
 @section('content')
-<div class="p-2 md:p-8 lg:p-10">
-    <!-- Header Section -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Daftar Buku</h1>
-        <p class="text-gray-600">Temukan dan pinjam buku favorit Anda dari koleksi perpustakaan</p>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50">
+    <!-- Hero Header Section -->
+    <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-48 translate-x-48"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-32 -translate-x-32"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    Jelajahi <span class="text-yellow-300">Koleksi Buku</span> Kami
+                </h1>
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+                    Temukan ribuan buku berkualitas dari berbagai kategori untuk memperkaya pengetahuan Anda
+                </p>
+            </div>
+        </div>
     </div>
 
-    <!-- Search and Filter -->
-    <form method="GET" action="{{ route('buku.index') }}" class="bg-gray-50 p-6 rounded-xl mb-6">
-        <div class="flex flex-col md:flex-row gap-4">
-            <!-- Search -->
-            <div class="flex-1">
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input 
-                        type="text" 
-                        name="search" 
-                        value="{{ request('search') }}"
-                        placeholder="Cari buku..." 
-                        class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 -mt-8 relative z-20">
+        <!-- Enhanced Search and Filter -->
+        <form method="GET" action="{{ route('buku.index') }}" class="bg-white backdrop-blur-lg rounded-2xl shadow-md border border-white/20 p-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                <!-- Search Input -->
+                <div class="md:col-span-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Buku</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}"
+                            placeholder="Masukkan judul buku, penulis, atau kata kunci..." 
+                            class="w-full pl-12 pr-4 py-4 bg-gray-50/80 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 placeholder-gray-400"
+                        >
+                    </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="md:col-span-3">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori</label>
+                    <select 
+                        name="kategori"
+                        class="w-full px-4 py-4 bg-gray-50/80 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
                     >
+                        <option value="">🏷️ Semua Kategori</option>
+                        @foreach($kategoris as $kategori)
+                            <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
+                                {{ $kategori->nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="md:col-span-3 flex gap-3">
+                    <button 
+                        type="submit" 
+                        class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:ring-4 focus:ring-blue-300 transform hover:scale-[1.02] transition-all duration-200 shadow-lg"
+                    >
+                        <i class="fas fa-search mr-2"></i>
+                        Cari
+                    </button>
+                    <a 
+                        href="{{ route('books.index') }}" 
+                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-4 px-6 rounded-xl focus:ring-4 focus:ring-gray-300 transition-all duration-200 flex items-center justify-center"
+                    >
+                        <i class="fas fa-refresh"></i>
+                    </a>
                 </div>
             </div>
+        </form>
 
-            <!-- Filter Kategori -->
-            <select 
-                name="kategori"
-                class="px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-                <option value="">Semua Kategori</option>
-                @foreach($kategoris as $kategori)
-                    <option value="{{ $kategori->id }}" {{ request('kategori') == $kategori->id ? 'selected' : '' }}>
-                        {{ $kategori->nama }}
-                    </option>
-                @endforeach
-            </select>
-            <button 
-                type="submit" 
-                class="px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
-            >
-                Cari
-            </button>
-            <a 
-                href="{{ route('books.index') }}" 
-                class="px-4 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 focus:ring-2 focus:ring-gray-200"
-            >
-                Reset
-            </a>
+        <!-- Stats Section -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+                <div class="text-2xl font-bold text-blue-600">{{ $books->total() ?? 0 }}</div>
+                <div class="text-sm text-gray-600">Total Buku</div>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+                <div class="text-2xl font-bold text-green-600">{{ $books->where('dipinjam', false)->count() }}</div>
+                <div class="text-sm text-gray-600">Tersedia</div>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+                <div class="text-2xl font-bold text-yellow-600">{{ $books->where('dipinjam', true)->count() }}</div>
+                <div class="text-sm text-gray-600">Dipinjam</div>
+            </div>
+            <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
+                <div class="text-2xl font-bold text-purple-600">{{ $kategoris->count() ?? 0 }}</div>
+                <div class="text-sm text-gray-600">Kategori</div>
+            </div>
         </div>
-    </form>
 
-
-    <!-- Books Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
-        @foreach ($books as $book)
-            <div class="group relative bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden 
-                        hover:shadow-lg hover:scale-[1.02] transition-transform duration-300">
-
-                <div class="relative w-full aspect-[2/3] overflow-hidden">
-                    @if($book->sampul)
-                        <img src="{{ $book->sampul }}" alt="{{ $book->judul }}" 
-                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    @else
-                        <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
-                            <svg class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.835 5.8 9.28 5 7.5 5c-2.485 0-4.5 2.015-4.5 4.5S5.015 14 7.5 14c1.78 0 3.335-.8 4.5-1.753m0-13C13.165 5.8 14.72 5 16.5 5c2.485 0 4.5 2.015 4.5 4.5S18.985 14 16.5 14c-1.78 0-3.335-.8-4.5-1.753" />
-                            </svg>
-                        </div>
-                    @endif
-                    
-                    <div class="absolute top-3 right-3 z-10">
-                        @if (!$book->dipinjam)
-                            <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full 
-                                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20">
-                                Tersedia
-                            </span>
+        <!-- Books Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-5 gap-6 mb-12">
+            @foreach ($books as $book)
+                <div class="group relative bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                    <!-- Book Cover -->
+                    <div class="relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                        @if($book->sampul)
+                            <img src="{{ $book->sampul }}" alt="{{ $book->judul }}" 
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                         @else
-                            <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full 
-                                        bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/20">
-                                Dipinjam
-                            </span>
-                        @endif
-                    </div>
-
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300
-                                flex items-center justify-center gap-2">
-                        <a href="#" class="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white 
-                                        hover:bg-white/30 transition-colors duration-200">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="p-4 flex flex-col justify-between h-[calc(100%-16rem)]">
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
-                            {{ $book->judul }}
-                        </h3>
-                        <div class="space-y-2 text-sm text-gray-500">
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                <span>{{ $book->penulis }}</span>
+                            <div class="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i class="fas fa-book text-4xl text-blue-400 mb-2"></i>
+                                    <div class="text-sm text-blue-600 font-medium px-4">{{ $book->judul }}</div>
+                                </div>
                             </div>
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                                </svg>
-                                <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-indigo-50 text-indigo-700">
-                                    {{ $book->kategori }}
+                        @endif
+                        
+                        <!-- Status Badge -->
+                        <div class="absolute top-3 right-3 z-10">
+                            @if (!$book->dipinjam)
+                                <span class="inline-flex items-center px-3 py-1.5 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 ring-2 ring-emerald-200">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Tersedia
                                 </span>
+                            @else
+                                <span class="inline-flex items-center px-3 py-1.5 text-xs font-bold rounded-full bg-red-100 text-red-800 ring-2 ring-red-200">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    Dipinjam
+                                </span>
+                            @endif
+                        </div>
+
+                        <!-- Overlay Actions -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                            <div class="flex gap-2">
+                                <button class="p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all duration-200 hover:scale-110">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="p-3 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all duration-200 hover:scale-110">
+                                    <i class="fas fa-heart"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-4">
+                    <!-- Book Info -->
+                    <div class="p-5">
+                        <div class="mb-3">
+                            <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                {{ $book->judul }}
+                            </h3>
+                            
+                            <div class="space-y-2">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-user w-4 mr-2 text-blue-500"></i>
+                                    <span class="font-medium">{{ $book->penulis }}</span>
+                                </div>
+                                
+                                <div class="flex items-center">
+                                    <i class="fas fa-tag w-4 mr-2 text-purple-500"></i>
+                                    <span class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                                        {{ $book->kategori }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
                         @auth
                             @if (!$book->dipinjam)
                                 <button onclick="openBorrowModal({{ $book->id }}, '{{ $book->judul }}')"
-                                        class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg 
-                                            hover:bg-indigo-700 transition-colors 
-                                            flex items-center justify-center gap-2">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                    Pinjam Buku
+                                        class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg group-hover:shadow-xl">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Pinjam Sekarang
                                 </button>
                             @else
-                                <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
-                                    <p class="text-red-700 font-medium text-sm">Buku sedang dipinjam</p>
+                                <div class="w-full bg-gradient-to-r from-red-100 to-red-200 text-red-700 font-bold py-3 rounded-xl text-center border-2 border-red-200">
+                                    <i class="fas fa-ban mr-2"></i>
+                                    Tidak Tersedia
                                 </div>
                             @endif
                         @else
                             <button onclick="showLoginPrompt()" 
-                                    class="w-full bg-gray-500 text-white font-semibold py-2.5 rounded-lg 
-                                        hover:bg-gray-600 transition-colors 
-                                        flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                </svg>
+                                    class="w-full bg-gradient-to-r from-gray-400 to-gray-500 text-white font-bold py-3 rounded-xl hover:from-gray-500 hover:to-gray-600 transform hover:scale-[1.02] transition-all duration-200">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
                                 Login untuk Pinjam
                             </button>
                         @endauth
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
 
-    <div id="borrowModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-lg transform transition-all duration-300 scale-95 opacity-0">
-            <div class="flex justify-between items-center mb-4">
-                <h4 class="text-xl font-bold text-gray-900">Pinjam Buku</h4>
-                <button onclick="closeBorrowModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+        <!-- Empty State -->
+        @if($books->isEmpty())
+            <div class="text-center py-20">
+                <div class="w-32 h-32 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-search text-5xl text-blue-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3">Tidak Ada Buku Ditemukan</h3>
+                <p class="text-gray-600 text-lg mb-6">Coba ubah kata kunci pencarian atau filter kategori</p>
+                <a href="{{ route('books.index') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200">
+                    <i class="fas fa-refresh mr-2"></i>
+                    Reset Filter
+                </a>
+            </div>
+        @endif
+
+        <!-- Pagination -->
+        @if($books->hasPages())
+            <div class="flex justify-center mt-12">
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-white/20 p-2">
+                    {{ $books->links() }}
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
+
+<!-- Enhanced Borrow Modal -->
+<div id="borrowModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-95 opacity-0">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-2xl">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h4 class="text-xl font-bold">Pinjam Buku</h4>
+                    <p class="text-blue-100 text-sm mt-1">Lengkapi data untuk meminjam buku</p>
+                </div>
+                <button onclick="closeBorrowModal()" class="text-white/80 hover:text-white transition-colors p-1">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            
-            <div class="mb-4">
-                <p class="text-sm text-gray-600">Anda akan meminjam buku:</p>
-                <p id="modalBookTitle" class="text-lg font-bold text-indigo-600 mt-1"></p>
+        </div>
+        
+        <!-- Modal Body -->
+        <div class="p-6">
+            <div class="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <p class="text-sm text-blue-800 font-medium mb-1">Buku yang akan dipinjam:</p>
+                <p id="modalBookTitle" class="text-lg font-bold text-blue-900"></p>
             </div>
 
-            <form id="borrowForm" method="POST" action="" class="space-y-4">
+            <form id="borrowForm" method="POST" action="" class="space-y-5">
                 @csrf
                 <div>
-                    <label for="no_hp" class="block text-sm font-medium text-gray-700">No. HP</label>
-                    <input type="text" name="no_hp" id="no_hp" placeholder="Masukkan nomor HP" required
-                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm 
-                                focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-                </div>
-                <div>
-                    <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat</label>
-                    <textarea name="alamat" id="alamat" placeholder="Masukkan alamat lengkap" required rows="3"
-                            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm 
-                                    focus:ring-indigo-500 focus:border-indigo-500 text-sm"></textarea>
+                    <label for="no_hp" class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-phone mr-2 text-green-500"></i>
+                        Nomor HP
+                    </label>
+                    <input type="text" name="no_hp" id="no_hp" placeholder="Contoh: 08123456789" required
+                        class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                 </div>
                 
-                <div class="flex gap-3 mt-6">
+                <div>
+                    <label for="alamat" class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+                        Alamat Lengkap
+                    </label>
+                    <textarea name="alamat" id="alamat" placeholder="Masukkan alamat lengkap untuk pengiriman buku" required rows="4"
+                            class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none"></textarea>
+                </div>
+                
+                <div class="flex gap-3 pt-4">
                     <button type="button" onclick="closeBorrowModal()"
-                            class="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg 
-                                hover:bg-gray-300 transition-colors text-sm">
+                            class="flex-1 bg-gray-100 text-gray-700 font-bold py-3 px-4 rounded-xl hover:bg-gray-200 transition-all duration-200">
+                        <i class="fas fa-times mr-2"></i>
                         Batal
                     </button>
                     <button type="submit"
-                            class="flex-1 bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg 
-                                hover:bg-indigo-700 transition-colors text-sm">
-                        Konfirmasi Pinjaman
+                            class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:from-blue-600 hover:to-indigo-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg">
+                        <i class="fas fa-check mr-2"></i>
+                        Konfirmasi
                     </button>
                 </div>
             </form>
         </div>
     </div>
-
-    <script>
-        const borrowModal = document.getElementById('borrowModal');
-        const modalBookTitle = document.getElementById('modalBookTitle');
-        const borrowForm = document.getElementById('borrowForm');
-
-        function openBorrowModal(bookId, bookTitle) {
-            modalBookTitle.textContent = bookTitle;
-            borrowForm.action = `/pinjam/${bookId}`;
-            borrowModal.classList.remove('hidden');
-            
-            // Trigger transition
-            setTimeout(() => {
-                borrowModal.querySelector('div').classList.remove('scale-95', 'opacity-0');
-                borrowModal.querySelector('div').classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeBorrowModal() {
-            borrowModal.querySelector('div').classList.remove('scale-100', 'opacity-100');
-            borrowModal.querySelector('div').classList.add('scale-95', 'opacity-0');
-            
-            // Hide modal after transition
-            setTimeout(() => {
-                borrowModal.classList.add('hidden');
-            }, 300);
-        }
-
-        // Close modal when clicking outside of it
-        window.onclick = function(event) {
-            if (event.target == borrowModal) {
-                closeBorrowModal();
-            }
-        }
-    </script>
-
-    <!-- Enhanced Styles -->
-    <style>
-    /* Line clamp utility */
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    /* Compact scrollbar */
-    ::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #f8fafc;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 3px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-    }
-
-    /* Enhanced focus states */
-    input:focus, textarea:focus, select:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    /* Smooth form animations */
-    .form-enter {
-        animation: formSlideIn 0.3s ease-out;
-    }
-
-    @keyframes formSlideIn {
-        from {
-            opacity: 0;
-            transform: translateY(-8px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Card hover optimizations */
-    .group:hover .book-cover-image {
-        transform: scale(1.05);
-    }
-
-    /* Badge improvements */
-    .status-badge {
-        font-size: 10px;
-        letter-spacing: 0.025em;
-    }
-
-    /* Button text optimization */
-    button span {
-        white-space: nowrap;
-    }
-
-    /* Responsive text scaling */
-    @media (max-width: 640px) {
-        .grid {
-            gap: 1rem;
-        }
-        
-        .book-card h3 {
-            font-size: 0.875rem;
-        }
-        
-        .book-card .book-details {
-            font-size: 0.75rem;
-        }
-    }
-
-    @media (min-width: 1536px) {
-        .grid {
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-        }
-    }
-
-    /* Micro-interactions */
-    .hover-lift:hover {
-        transform: translateY(-1px);
-    }
-
-    .click-scale:active {
-        transform: scale(0.98);
-    }
-
-    /* Enhanced shadows */
-    .enhanced-shadow {
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    }
-
-    .enhanced-shadow:hover {
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    </style>
-
-    <!-- Empty State -->
-    @if($books->isEmpty())
-        <div class="text-center py-16">
-            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-book text-gray-400 text-3xl"></i>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Belum ada buku</h3>
-            <p class="text-gray-600">Koleksi buku akan muncul di sini</p>
-        </div>
-    @endif
-
-    <!-- Pagination -->
-    @if($books->hasPages())
-        <div class="mt-8 flex justify-center">
-            {{ $books->links() }}
-        </div>
-    @endif
 </div>
 
-<!-- Login Prompt Modal -->
-<div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-        <div class="text-center">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-sign-in-alt text-blue-600 text-2xl"></i>
+<!-- Enhanced Login Modal -->
+<div id="loginModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+        <div class="bg-gradient-to-r from-yellow-400 to-red-500 text-white p-8 text-center">
+            <div class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-lock text-3xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Login Diperlukan</h3>
-            <p class="text-gray-600 mb-6">Anda harus login terlebih dahulu untuk meminjam buku</p>
+            <h3 class="text-2xl font-bold mb-2">Login Diperlukan</h3>
+            <p class="text-orange-100">Masuk untuk mengakses fitur peminjaman buku</p>
+        </div>
+        
+        <div class="p-8">
             <div class="flex gap-3">
                 <button onclick="hideLoginPrompt()" 
-                        class="flex-1 bg-gray-100 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-200 transition-all duration-200">
+                        class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-xl transition-all duration-200">
+                    <i class="fas fa-times mr-2"></i>
                     Batal
                 </button>
                 <a href="{{ route('login') }}" 
-                   class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transition-all duration-300 text-center">
-                    Login Sekarang
+                   class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 text-center transform hover:scale-[1.02] shadow-lg">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Login
                 </a>
             </div>
         </div>
@@ -385,9 +306,28 @@
 </div>
 
 <script>
-function toggleBorrowForm(bookId) {
-    const form = document.getElementById('borrowForm' + bookId);
-    form.classList.toggle('hidden');
+const borrowModal = document.getElementById('borrowModal');
+const modalBookTitle = document.getElementById('modalBookTitle');
+const borrowForm = document.getElementById('borrowForm');
+
+function openBorrowModal(bookId, bookTitle) {
+    modalBookTitle.textContent = bookTitle;
+    borrowForm.action = `/pinjam/${bookId}`;
+    borrowModal.classList.remove('hidden');
+    
+    setTimeout(() => {
+        borrowModal.querySelector('div').classList.remove('scale-95', 'opacity-0');
+        borrowModal.querySelector('div').classList.add('scale-100', 'opacity-100');
+    }, 10);
+}
+
+function closeBorrowModal() {
+    borrowModal.querySelector('div').classList.remove('scale-100', 'opacity-100');
+    borrowModal.querySelector('div').classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => {
+        borrowModal.classList.add('hidden');
+    }, 300);
 }
 
 function showLoginPrompt() {
@@ -398,17 +338,23 @@ function hideLoginPrompt() {
     document.getElementById('loginModal').classList.add('hidden');
 }
 
-// Close modal when clicking outside
-document.getElementById('loginModal').addEventListener('click', function(e) {
-    if (e.target === this) {
+// Close modals when clicking outside
+window.onclick = function(event) {
+    if (event.target == borrowModal) {
+        closeBorrowModal();
+    }
+    if (event.target == document.getElementById('loginModal')) {
         hideLoginPrompt();
     }
-});
+}
 
-// Search functionality
-document.querySelector('input[placeholder*="Cari"]').addEventListener('input', function(e) {
-    // Add search functionality here
-    console.log('Searching for:', e.target.value);
+// Enhanced search with loading state
+document.querySelector('input[name="search"]').addEventListener('input', function(e) {
+    // Add debounced search functionality here
+    clearTimeout(window.searchTimeout);
+    window.searchTimeout = setTimeout(() => {
+        console.log('Searching for:', e.target.value);
+    }, 500);
 });
 </script>
 
@@ -419,5 +365,71 @@ document.querySelector('input[placeholder*="Cari"]').addEventListener('input', f
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+}
+
+/* Smooth animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.book-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.book-card:nth-child(even) {
+    animation-delay: 0.1s;
+}
+
+.book-card:nth-child(3n) {
+    animation-delay: 0.2s;
+}
+
+/* Responsive improvements */
+@media (max-width: 640px) {
+    .grid {
+        gap: 1rem;
+    }
+}
+
+/* Focus improvements */
+input:focus, textarea:focus, select:focus, button:focus {
+    outline: none;
+}
+
+/* Button hover effects */
+.btn-gradient {
+    background-size: 200% 200%;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    background-position: right center;
+}
 </style>
+
 @endsection
