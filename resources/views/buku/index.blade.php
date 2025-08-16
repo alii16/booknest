@@ -420,4 +420,5 @@ document.querySelector('input[placeholder*="Cari"]').addEventListener('input', f
     overflow: hidden;
 }
 </style>
+@include('layouts.footer')
 @endsection
