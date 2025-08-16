@@ -334,6 +334,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 [⭐ Star this project](https://github.com/alii16/booknest) • [🐛 Report Bug](https://github.com/alii16/booknest/issues) • [💡 Request Feature](https://github.com/alii16/booknest/issues)
 
-**BookNest ©️ 2025 - Empowering Indonesian Literacy Through Technology**
 
-</div>
