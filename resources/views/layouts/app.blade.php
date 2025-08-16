@@ -17,6 +17,8 @@
         @yield('content')
     </main>
 
+    @include('layouts.footer')
+
     <!-- SweetAlert2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.32/sweetalert2.all.min.js"></script>
     
