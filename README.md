@@ -1,4 +1,4 @@
-# 📚 BookNest - Digital Library Platform
+ # 📚 BookNest - Digital Library Platform
 
 ![BookNest Logo](https://booknest.aptech.my.id/img/logo.webp)
 
@@ -303,6 +303,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **Backend Developer**: [Ali Polanunu](https://github.com/alii16)
 - **Data Specialist 1**: [Diva Maharachmi](https://github.com/Divaa-web)
 - **Data Specialist 2**: [Ana Liana](https://github.com/anaLiana02)
+- **Data Specialist 3**: [Ruth Azaria](https://github.com/azaa7757-cmd)
 
 ## 📞 Contact & Support
 
@@ -332,6 +333,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Made with💡for Indonesian Literacy**
 
-[⭐ Star this project](https://github.com/alii16/booknest) • [🐛 Report Bug](https://github.com/alii16/booknest/issues) • [💡 Request Feature](https://github.com/alii16/booknest/issues)
-
+[⭐ Star this project](https://github.com/alii16/booknest) • [🐛 Report Bug](https://github.com/alii16/booknest/issues) • [💡 Request Feature](https://github.com/alii16/booknest/issues
+**BookNest © 2025 - Empowering Indonesian Literacy Through Technology**
+</div>
 
