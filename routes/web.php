@@ -46,8 +46,17 @@ Route::middleware('auth')->group(function () {
 
 // Routes untuk Pustakawan
 Route::middleware(['auth', 'isPustakawan'])->prefix('pustakawan')->name('pustakawan.')->group(function () {
-    Route::get('/dashboard', [PustakawanController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [BookController::class, 'dashboard'])->name('dashboard');
     
+    // Book Management untuk Pustakawan
+    Route::get('/books', [BookController::class, 'books'])->name('books.index');
+    Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/books', [BookController::class, 'store'])->name('books.store');
+    Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+    Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
+    Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+
     // User Management untuk Pustakawan
     Route::get('/users', [PustakawanController::class, 'users'])->name('users.index');
     Route::get('/users/create', [PustakawanController::class, 'createUser'])->name('users.create');
@@ -56,9 +65,6 @@ Route::middleware(['auth', 'isPustakawan'])->prefix('pustakawan')->name('pustaka
     Route::get('/users/{user}/edit', [PustakawanController::class, 'editUser'])->name('users.edit');
     Route::put('/users/{user}', [PustakawanController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{user}', [PustakawanController::class, 'destroyUser'])->name('users.destroy');
-
-    // Kelola Buku untuk Pustakawan
-    Route::resource('books', BookController::class)->except(['show']);
     
     // Kelola Peminjaman
     Route::get('/loans', [LoanController::class, 'adminLoans'])->name('loans.index');

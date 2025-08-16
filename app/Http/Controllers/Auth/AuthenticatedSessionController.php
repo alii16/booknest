@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($user->role === 'pustakawan') {
-            return redirect()->intended('/pustakawan/books');
+            return redirect()->intended('/pustakawan/dashboard');
         }
 
         return redirect()->intended('/buku'); // untuk peminjam

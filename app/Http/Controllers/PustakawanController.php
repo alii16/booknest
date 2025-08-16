@@ -37,7 +37,7 @@ class PustakawanController extends Controller
             ->take(5)
             ->get();
 
-        return view('pustakawan.dashboard', compact('statistics', 'recent_loans', 'recent_users'));
+        return view('pustakawan.books.index', compact('statistics', 'recent_loans', 'recent_users'));
     }
 
     // Kelola Users

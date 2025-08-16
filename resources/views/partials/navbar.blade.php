@@ -40,7 +40,7 @@
                             <div id="adminDropdownMenu"
                                 class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right z-50 backdrop-blur-md bg-white/95">
                                 <div class="p-2">
-                                    <a href="{{ route('pustakawan.books.index') }}" class="flex items-center px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 rounded-lg transition-all duration-200 group">
+                                    <a href="{{ route('pustakawan.dashboard') }}" class="flex items-center px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 rounded-lg transition-all duration-200 group">
                                         <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors duration-200">
                                             <i class="fas fa-book text-blue-600 text-sm"></i>
                                         </div>
