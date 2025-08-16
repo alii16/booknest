@@ -5,7 +5,7 @@
     <!-- Header Section -->
     <div class="mb-8">
         <div class="flex items-center mb-4">
-            <a href="{{ route('pustakawan.books.index') }}" class="mr-4 p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+            <a href="{{ route('pustakawan.dashboard') }}" class="mr-4 p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>

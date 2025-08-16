@@ -33,6 +33,28 @@ class BookController extends Controller
 
         return view('buku.index', compact('books', 'kategoris'));
     }
+
+    public function dashboard(Request $request)
+    {
+        $query = Book::query();
+
+        // Search
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori_id', $request->kategori);
+        }
+
+        $books = $query->paginate(10);
+
+        // Ambil semua kategori untuk dropdown
+        $kategoris = Kategori::all();
+
+        return view('pustakawan.books.index', compact('books', 'kategoris'));
+    }
     // Tampilkan form tambah buku
     public function create()
     {
@@ -84,7 +106,7 @@ class BookController extends Controller
 
         Book::create($validated);
         
-        return redirect()->route('pustakawan.books.index')
+        return redirect()->route('pustakawan.dashboard')
                         ->with('success', 'Buku berhasil ditambahkan!');
     }
 
@@ -145,7 +167,7 @@ class BookController extends Controller
 
         $book->update($validated);
         
-        return redirect()->route('pustakawan.books.index')
+        return redirect()->route('pustakawan.dashboard')
                         ->with('success', 'Buku berhasil diperbarui!');
     }
 
@@ -165,7 +187,7 @@ class BookController extends Controller
             // Hapus buku dari database
             $book->delete();
 
-            return redirect()->route('pustakawan.books.index')
+            return redirect()->route('pustakawan.dashboard')
                             ->with('success', 'Buku berhasil dihapus!');
             
         } catch (\Exception $e) {
@@ -174,11 +196,11 @@ class BookController extends Controller
             
             // Cek jika error terkait foreign key constraint
             if (str_contains($e->getMessage(), 'Integrity constraint violation')) {
-                return redirect()->route('pustakawan.books.index')
+                return redirect()->route('pustakawan.dashboard')
                                 ->with('error', 'Buku tidak dapat dihapus karena masih terkait dengan data lain (mis. riwayat peminjaman)!');
             }
 
-            return redirect()->route('pustakawan.books.index')
+            return redirect()->route('pustakawan.dashboard')
                             ->with('error', 'Terjadi kesalahan saat menghapus buku. Silakan cek log aplikasi untuk detailnya.');
         }
     }
